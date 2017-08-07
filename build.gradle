@@ -1,0 +1,53 @@
+plugins {
+    id "java"
+    id "maven-publish"
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
+group 'pl.rebigo.libs'
+version '1.0.0.5'
+
+sourceCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/java", "src/main/resources"]
+            includes = ["**/*.fxml", "**/*.xml", "**/*.properties", "**/*.css", "**/*.json", "**/*.sql", "**/*.png", "**/*.gif", "**/*.jpg", "**/*.ico", "**/*.html", "**/*.js", "**/*.jrxml", "**/*.wav"]
+        }
+    }
+}
+
+dependencies {
+    compile group: 'joda-time', name: 'joda-time', version: '2.9.4'
+    compile group: 'com.google.guava', name: 'guava', version: '21.0'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+bintray {
+    user = 'rebigo'
+    key = System.getenv("BINTRAY_APIKEY")
+    pkg {
+        repo = 'libs'
+        name = project.getName()
+        userOrg = 'rebigo'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/rebigo/' + project.getName() + '.git'
+    }
+    publications = ['MyPublication']
+
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+        }
+    }
+}
